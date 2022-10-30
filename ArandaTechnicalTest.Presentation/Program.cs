@@ -24,7 +24,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddControllers();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(
-        builder.Configuration.GetConnectionString("localdb")
+        builder.Configuration.GetConnectionString("sqlServer")
 ));
 
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
@@ -50,6 +50,13 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+}
+
+//migrate any database changes on startup (includes initial db creation)
+using (var scope = app.Services.CreateScope())
+{
+    var dataContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    await dataContext.Database.MigrateAsync();
 }
 
 app.UseHttpsRedirection();

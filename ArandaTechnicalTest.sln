@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArandaTechnicalTest.Domain"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArandaTechnicalTest.Data", "ArandaTechnicalTest.Data\ArandaTechnicalTest.Data.csproj", "{910D7C84-F23D-4BDF-847F-ECE9C93E5833}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArandaTechnicalTest.Tests", "ArandaTechnicalTest.Tests\ArandaTechnicalTest.Tests.csproj", "{70E87851-6582-4821-AF6C-29AB6F159B60}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArandaTechnicalTest.Presentation", "ArandaTechnicalTest.Presentation\ArandaTechnicalTest.Presentation.csproj", "{AFEF3B5C-C92F-4F97-A7C7-39DE9913F82F}"
 EndProject
 Global
@@ -25,10 +23,6 @@ Global
 		{910D7C84-F23D-4BDF-847F-ECE9C93E5833}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{910D7C84-F23D-4BDF-847F-ECE9C93E5833}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{910D7C84-F23D-4BDF-847F-ECE9C93E5833}.Release|Any CPU.Build.0 = Release|Any CPU
-		{70E87851-6582-4821-AF6C-29AB6F159B60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{70E87851-6582-4821-AF6C-29AB6F159B60}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{70E87851-6582-4821-AF6C-29AB6F159B60}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{70E87851-6582-4821-AF6C-29AB6F159B60}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AFEF3B5C-C92F-4F97-A7C7-39DE9913F82F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AFEF3B5C-C92F-4F97-A7C7-39DE9913F82F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AFEF3B5C-C92F-4F97-A7C7-39DE9913F82F}.Release|Any CPU.ActiveCfg = Release|Any CPU
