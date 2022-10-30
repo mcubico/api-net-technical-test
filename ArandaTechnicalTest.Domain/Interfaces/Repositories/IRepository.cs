@@ -42,7 +42,7 @@
         /// <param name="page">Número de página con los resultados que se desea ver</param>
         /// <param name="itemsPerPage">Cantidad de resultados que se desean obtener</param>
         /// <returns>Lista de registros encontrados</returns>
-        Task<IEnumerable<T>> GetAllAsync(int page = 1, int itemsPerPage = 10);
+        Task<IEnumerable<T>> GetAllAsync(int page, int itemsPerPage);
 
         #endregion
     }

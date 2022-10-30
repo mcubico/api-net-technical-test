@@ -76,11 +76,12 @@ namespace ArandaTechnicalTest.Presentation.Controllers
 
         #region SEARCH ACTIONS
 
-        [HttpGet("{page:int:min(1)}/{itemsPerPage:int:min(1)}")]
-        [ProducesResponseType(type: typeof(ProblemDetails), statusCode: StatusCodes.Status404NotFound)]
+        [HttpGet("{page:int}/{itemsPerPage:int}")]
         [ProducesResponseType(type: typeof(List<ProductDTO>), statusCode: StatusCodes.Status200OK)]
-        public async Task<ActionResult<List<ProductDTO>>> Get(int page = 1, int itemsPerPage = 10)
+        public async Task<ActionResult<List<ProductDTO>>> Get(int page = 1, int itemsPerPage = 5)
         {
+            page = page == 0 ? 1 : page;
+            itemsPerPage = itemsPerPage == 0 ? 5 : itemsPerPage;
             int totalProducts = await _repo.GetTotalRecordsAsync();
 
             // Agrego a la cabecera de la respuesta la cantidad total de registros que existen
@@ -94,9 +95,15 @@ namespace ArandaTechnicalTest.Presentation.Controllers
             var products = await _repo.GetAllAsync(page, itemsPerPage);
             var productsDto = _mapper.Map<List<ProductDTO>>(products);
 
-            return products == null || productsDto.Count == 0
-                ? NotFound()
-                : Ok(productsDto);
+            return Ok(productsDto);
+        }
+
+        [HttpGet("total")]
+        [ProducesResponseType(type: typeof(int), statusCode: StatusCodes.Status200OK)]
+        public async Task<ActionResult<int>> GetTotal()
+        {
+            int response = await _repo.GetTotalRecordsAsync();
+            return Ok(response);
         }
 
         #endregion

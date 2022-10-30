@@ -65,7 +65,7 @@ namespace ArandaTechnicalTest.Domain.Repositories
         {
             IQueryable<Products> query = _context.Products.AsQueryable();
             return await query.Skip(itemsPerPage * (page - 1))
-                              .Take(itemsPerPage)?.ToListAsync();
+                              .Take(itemsPerPage).ToListAsync();
         }
 
         public async Task<Products> GetByIdAsync(Guid id)
