@@ -2,7 +2,7 @@
 
 namespace ArandaTechnicalTest.Data.Entities
 {
-    public class Product
+    public class Products
     {
         [Key]
         public Guid Id { get; set; }

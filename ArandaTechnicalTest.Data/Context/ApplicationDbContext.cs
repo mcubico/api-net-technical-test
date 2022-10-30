@@ -10,7 +10,7 @@ namespace ArandaTechnicalTest.Data.Context
         {
         }
 
-        public DbSet<Product> Products { get; set; }
+        public DbSet<Products> Products { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

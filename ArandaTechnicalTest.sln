@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArandaTechnicalTest.Domain", "ArandaTechnicalTest.Domain\ArandaTechnicalTest.Domain.csproj", "{DB203D53-E3F7-4A17-B15C-C6B9725B6D6C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArandaTechnicalTest.Domain", "ArandaTechnicalTest.Domain\ArandaTechnicalTest.Domain.csproj", "{DB203D53-E3F7-4A17-B15C-C6B9725B6D6C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArandaTechnicalTest.Data", "ArandaTechnicalTest.Data\ArandaTechnicalTest.Data.csproj", "{910D7C84-F23D-4BDF-847F-ECE9C93E5833}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArandaTechnicalTest.Data", "ArandaTechnicalTest.Data\ArandaTechnicalTest.Data.csproj", "{910D7C84-F23D-4BDF-847F-ECE9C93E5833}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArandaTechnicalTest.Tests", "ArandaTechnicalTest.Tests\ArandaTechnicalTest.Tests.csproj", "{70E87851-6582-4821-AF6C-29AB6F159B60}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArandaTechnicalTest.Tests", "ArandaTechnicalTest.Tests\ArandaTechnicalTest.Tests.csproj", "{70E87851-6582-4821-AF6C-29AB6F159B60}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArandaTechnicalTest.Presentation", "ArandaTechnicalTest.Presentation\ArandaTechnicalTest.Presentation.csproj", "{AFEF3B5C-C92F-4F97-A7C7-39DE9913F82F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArandaTechnicalTest.Presentation", "ArandaTechnicalTest.Presentation\ArandaTechnicalTest.Presentation.csproj", "{AFEF3B5C-C92F-4F97-A7C7-39DE9913F82F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
