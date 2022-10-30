@@ -24,7 +24,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddControllers();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(
-        builder.Configuration.GetConnectionString("sqlServer")
+        builder.Configuration.GetConnectionString("localdb")
 ));
 
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
