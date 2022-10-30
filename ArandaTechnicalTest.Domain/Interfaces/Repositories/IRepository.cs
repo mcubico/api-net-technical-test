@@ -44,6 +44,16 @@
         /// <returns>Lista de registros encontrados</returns>
         Task<IEnumerable<T>> GetAllAsync(int page, int itemsPerPage);
 
+        /// <summary>
+        /// Busca todos los registros
+        /// </summary>
+        /// <param name="page">Número de página con los resultados que se desea ver</param>
+        /// <param name="itemsPerPage">Cantidad de resultados que se desean obtener</param>
+        /// <param name="sortingBy">Campo por el cual se desean ordenar los datos</param>
+        /// <param name="directionAsc">Tipo de ordenamiento (ascendente o descendente)</param>
+        /// <returns>Lista de registros encontrados</returns>
+        Task<IEnumerable<T>> GetAllAsync(int page, int itemsPerPage, string sortingBy, bool directionAsc);
+
         #endregion
     }
 }

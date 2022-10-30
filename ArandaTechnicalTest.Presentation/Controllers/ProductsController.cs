@@ -3,7 +3,6 @@ using ArandaTechnicalTest.Domain.Interfaces.Repositories;
 using ArandaTechnicalTest.Presentation.ModelsDTO;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace ArandaTechnicalTest.Presentation.Controllers
 {
@@ -15,14 +14,16 @@ namespace ArandaTechnicalTest.Presentation.Controllers
 
         private readonly IProductRepository _repo;
         private readonly IMapper _mapper;
+        public static IWebHostEnvironment _environment;
 
         #endregion
 
         #region CONSTRUCTORS
-        public ProductsController(IProductRepository repo, IMapper mapper)
+        public ProductsController(IProductRepository repo, IMapper mapper, IWebHostEnvironment environment)
         {
             _repo = repo;
             _mapper = mapper;
+            _environment = environment;
         }
 
         #endregion
@@ -32,8 +33,10 @@ namespace ArandaTechnicalTest.Presentation.Controllers
         [HttpPost]
         [ProducesResponseType(type: typeof(ProblemDetails), statusCode: StatusCodes.Status400BadRequest)]
         [ProducesResponseType(type: typeof(ProductDTO), statusCode: StatusCodes.Status201Created)]
-        public async Task<IActionResult> Post([FromBody] ProductCreationDTO data)
+        public async Task<IActionResult> Post([FromForm] ProductCreationDTO data)
         {
+            data.Image = saveImage(data.File);
+
             Products product = _mapper.Map<Products>(data);
 
             product = await _repo.AddAsync(product);
@@ -46,11 +49,13 @@ namespace ArandaTechnicalTest.Presentation.Controllers
         [ProducesResponseType(type: typeof(ProblemDetails), statusCode: StatusCodes.Status400BadRequest)]
         [ProducesResponseType(type: typeof(ProblemDetails), statusCode: StatusCodes.Status404NotFound)]
         [ProducesResponseType(statusCode: StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> Put([FromBody] ProductDTO data)
+        public async Task<IActionResult> Put([FromForm] ProductDTO data)
         {
             bool exists = await _repo.ExistsProduct(data.Id);
             if (!exists)
                 return NotFound();
+
+            data.Image = saveImage(data.File);
 
             Products product = _mapper.Map<Products>(data);
             _ = await _repo.UpdateAsync(product);
@@ -104,6 +109,27 @@ namespace ArandaTechnicalTest.Presentation.Controllers
         {
             int response = await _repo.GetTotalRecordsAsync();
             return Ok(response);
+        }
+
+        #endregion
+
+        #region METHODS
+
+        private string saveImage(IFormFile? file)
+        {
+            if (file == null || file.Length == 0)
+                return string.Empty;
+
+            if (!Directory.Exists(_environment.WebRootPath + "\\Upload"))
+                Directory.CreateDirectory(_environment.WebRootPath + "\\Upload\\");
+
+            using (FileStream filestream = System.IO.File.Create(_environment.WebRootPath + "\\Upload\\" + file.FileName))
+            {
+                file.CopyTo(filestream);
+                filestream.Flush();
+            }
+
+            return file.FileName;
         }
 
         #endregion

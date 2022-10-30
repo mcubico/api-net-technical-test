@@ -32,5 +32,7 @@ namespace ArandaTechnicalTest.Presentation.ModelsDTO
             ErrorMessageResourceType = typeof(MessagesResource),
             ErrorMessageResourceName = "StringLengthMax")]
         public string? Image { get; set; }
+
+        public IFormFile? File { get; set; }
     }
 }

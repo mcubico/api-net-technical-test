@@ -68,6 +68,14 @@ namespace ArandaTechnicalTest.Domain.Repositories
                               .Take(itemsPerPage).ToListAsync();
         }
 
+        public async Task<IEnumerable<Products>> GetAllAsync(int page = 1, int itemsPerPage = 10, string sortingBy = "", bool directionAsc = true)
+        {
+            IQueryable<Products> query = _context.Products.AsQueryable();
+            return await query
+                .Skip(itemsPerPage * (page - 1))
+                              .Take(itemsPerPage).ToListAsync();
+        }
+
         public async Task<Products> GetByIdAsync(Guid id)
         {
             return await _context.Products.FirstOrDefaultAsync(elm => elm.Id.Equals(id));

@@ -63,7 +63,7 @@ app.UseHttpsRedirection();
 
 app.UseCors(ALLOWED_ORIGINS);
 
-//app.UseAuthorization();
+app.UseStaticFiles();
 
 app.MapControllers();
 
