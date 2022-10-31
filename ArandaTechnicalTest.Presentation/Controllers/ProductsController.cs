@@ -84,7 +84,6 @@ namespace ArandaTechnicalTest.Presentation.Controllers
         #region SEARCH ACTIONS
 
         [HttpGet]
-        //[Route("'page={page:int?}&size={itemsPerPage:int?}&sort={sortBy?}&direction={directionAsc:bool?}")]
         [ProducesResponseType(type: typeof(List<ProductDTO>), statusCode: StatusCodes.Status200OK)]
         public async Task<ActionResult<List<ProductDTO>>> Get([FromQuery] QueryParametersPagination parameters)
         {

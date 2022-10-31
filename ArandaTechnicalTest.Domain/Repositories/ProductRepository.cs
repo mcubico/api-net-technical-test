@@ -75,56 +75,21 @@ namespace ArandaTechnicalTest.Domain.Repositories
             IQueryable<Products> query = _context.Products.AsQueryable();
             var response = new List<Products>();
 
-            if (!directionAsc)
+            query = query.Skip(itemsPerPage * (page - 1)).Take(itemsPerPage);
+
+            if (!string.IsNullOrEmpty(sortBy))
             {
-                if (!string.IsNullOrEmpty(sortBy))
-                {
-                    if(sortBy.ToLower().Equals("name"))
-                    {
-                        response = await query
-                            .OrderByDescending(elm => elm.Name)
-                            .Skip(itemsPerPage * (page - 1))
-                                          .Take(itemsPerPage).ToListAsync();
-                    }
-                    else if(sortBy.ToLower().Equals("category"))
-                    {
-                        response = await query
-                            .OrderByDescending(elm => elm.Category)
-                            .Skip(itemsPerPage * (page - 1))
-                            .Take(itemsPerPage).ToListAsync();
-                    }
-                    else
-                        response = await query
-                            .Skip(itemsPerPage * (page - 1))
-                            .Take(itemsPerPage).ToListAsync();
-                }
-            }
-            else
-            {
-                if (!string.IsNullOrEmpty(sortBy))
-                {
-                    if (sortBy.ToLower().Equals("name"))
-                    {
-                        response = await query
-                            .OrderBy(elm => elm.Name)
-                            .Skip(itemsPerPage * (page - 1))
-                            .Take(itemsPerPage).ToListAsync();
-                    }
-                    else if (sortBy.ToLower().Equals("category"))
-                    {
-                        response = await query
-                            .OrderBy(elm => elm.Category)
-                            .Skip(itemsPerPage * (page - 1))
-                            .Take(itemsPerPage).ToListAsync();
-                    }
-                    else
-                        response = await query
-                            .Skip(itemsPerPage * (page - 1))
-                            .Take(itemsPerPage).ToListAsync();
-                }
+                if (sortBy.ToLower().Equals("name"))
+                    query = directionAsc 
+                        ? query.OrderBy(elm => elm.Name)
+                        : query.OrderByDescending(elm => elm.Name);
+                else if (sortBy.ToLower().Equals("category"))
+                    query = directionAsc
+                        ? query.OrderBy(elm => elm.Category)
+                        : query.OrderByDescending(elm => elm.Category);
             }
 
-            return response;
+            return await query.ToListAsync();
         }
 
         public async Task<Products> GetByIdAsync(Guid id)
