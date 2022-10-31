@@ -1,5 +1,6 @@
 ﻿using ArandaTechnicalTest.Data.Entities;
 using ArandaTechnicalTest.Domain.Interfaces.Repositories;
+using ArandaTechnicalTest.Presentation.Models;
 using ArandaTechnicalTest.Presentation.ModelsDTO;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -19,6 +20,7 @@ namespace ArandaTechnicalTest.Presentation.Controllers
         #endregion
 
         #region CONSTRUCTORS
+
         public ProductsController(IProductRepository repo, IMapper mapper, IWebHostEnvironment environment)
         {
             _repo = repo;
@@ -81,12 +83,13 @@ namespace ArandaTechnicalTest.Presentation.Controllers
 
         #region SEARCH ACTIONS
 
-        [HttpGet("{page:int}/{itemsPerPage:int}")]
+        [HttpGet]
+        //[Route("'page={page:int?}&size={itemsPerPage:int?}&sort={sortBy?}&direction={directionAsc:bool?}")]
         [ProducesResponseType(type: typeof(List<ProductDTO>), statusCode: StatusCodes.Status200OK)]
-        public async Task<ActionResult<List<ProductDTO>>> Get(int page = 1, int itemsPerPage = 5)
+        public async Task<ActionResult<List<ProductDTO>>> Get([FromQuery] QueryParametersPagination parameters)
         {
-            page = page == 0 ? 1 : page;
-            itemsPerPage = itemsPerPage == 0 ? 5 : itemsPerPage;
+            parameters.Page = parameters.Page == 0 ? 1 : parameters.Page;
+            parameters.ItemsPerPage = parameters.ItemsPerPage == 0 ? 5 : parameters.ItemsPerPage;
             int totalProducts = await _repo.GetTotalRecordsAsync();
 
             // Agrego a la cabecera de la respuesta la cantidad total de registros que existen
@@ -95,9 +98,11 @@ namespace ArandaTechnicalTest.Presentation.Controllers
 
             // Agrego a la cabecera de la respuesta la cantidad de páginas disponibles acorde a
             // la cantidad de items por por página que desea obtener
-            Response.Headers["X-Total-Pages"] = (totalProducts / itemsPerPage).ToString();
+            Response.Headers["X-Total-Pages"] = (totalProducts / parameters.ItemsPerPage).ToString();
 
-            var products = await _repo.GetAllAsync(page, itemsPerPage);
+            var products = string.IsNullOrWhiteSpace(parameters.SortBy)
+                ? await _repo.GetAllAsync(parameters.Page, parameters.ItemsPerPage)
+                : await _repo.GetAllAsync(parameters.Page, parameters.ItemsPerPage, parameters.SortBy, parameters.DirectionAsc);
             var productsDto = _mapper.Map<List<ProductDTO>>(products);
 
             return Ok(productsDto);

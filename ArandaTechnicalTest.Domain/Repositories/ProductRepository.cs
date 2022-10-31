@@ -3,6 +3,7 @@ using ArandaTechnicalTest.Data.Entities;
 using ArandaTechnicalTest.Domain.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.Linq;
 
 namespace ArandaTechnicalTest.Domain.Repositories
 {
@@ -32,6 +33,7 @@ namespace ArandaTechnicalTest.Domain.Repositories
         #endregion
 
         #region CRUD
+
         public async Task<Products> AddAsync(Products entity)
         {
             _logger.LogInformation("Registrando un nuevo producto");
@@ -68,12 +70,61 @@ namespace ArandaTechnicalTest.Domain.Repositories
                               .Take(itemsPerPage).ToListAsync();
         }
 
-        public async Task<IEnumerable<Products>> GetAllAsync(int page = 1, int itemsPerPage = 10, string sortingBy = "", bool directionAsc = true)
+        public async Task<IEnumerable<Products>> GetAllAsync(int page = 1, int itemsPerPage = 10, string sortBy = "", bool directionAsc = true)
         {
             IQueryable<Products> query = _context.Products.AsQueryable();
-            return await query
-                .Skip(itemsPerPage * (page - 1))
-                              .Take(itemsPerPage).ToListAsync();
+            var response = new List<Products>();
+
+            if (!directionAsc)
+            {
+                if (!string.IsNullOrEmpty(sortBy))
+                {
+                    if(sortBy.ToLower().Equals("name"))
+                    {
+                        response = await query
+                            .OrderByDescending(elm => elm.Name)
+                            .Skip(itemsPerPage * (page - 1))
+                                          .Take(itemsPerPage).ToListAsync();
+                    }
+                    else if(sortBy.ToLower().Equals("category"))
+                    {
+                        response = await query
+                            .OrderByDescending(elm => elm.Category)
+                            .Skip(itemsPerPage * (page - 1))
+                            .Take(itemsPerPage).ToListAsync();
+                    }
+                    else
+                        response = await query
+                            .Skip(itemsPerPage * (page - 1))
+                            .Take(itemsPerPage).ToListAsync();
+                }
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(sortBy))
+                {
+                    if (sortBy.ToLower().Equals("name"))
+                    {
+                        response = await query
+                            .OrderBy(elm => elm.Name)
+                            .Skip(itemsPerPage * (page - 1))
+                            .Take(itemsPerPage).ToListAsync();
+                    }
+                    else if (sortBy.ToLower().Equals("category"))
+                    {
+                        response = await query
+                            .OrderBy(elm => elm.Category)
+                            .Skip(itemsPerPage * (page - 1))
+                            .Take(itemsPerPage).ToListAsync();
+                    }
+                    else
+                        response = await query
+                            .Skip(itemsPerPage * (page - 1))
+                            .Take(itemsPerPage).ToListAsync();
+                }
+            }
+
+            return response;
         }
 
         public async Task<Products> GetByIdAsync(Guid id)
