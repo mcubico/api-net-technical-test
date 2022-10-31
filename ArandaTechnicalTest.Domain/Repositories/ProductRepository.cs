@@ -137,6 +137,21 @@ namespace ArandaTechnicalTest.Domain.Repositories
             return await _context.Products.CountAsync();
         }
 
+        public Task<IEnumerable<Products>> FilterAsync(int page, int itemsPerPage, string sortBy, bool directionAsc, string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<Products>> FilterAsync(int page, int itemsPerPage, string sortBy, bool directionAsc, string name, string description)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<Products>> FilterAsync(int page, int itemsPerPage, string sortBy, bool directionAsc, string name, string description, string category)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
 
         #region VALIDATIONS
