@@ -4,6 +4,7 @@ using ArandaTechnicalTest.Domain.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Linq;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace ArandaTechnicalTest.Domain.Repositories
 {
@@ -63,31 +64,18 @@ namespace ArandaTechnicalTest.Domain.Repositories
         #endregion
 
         #region SEARCHES
-        public async Task<IEnumerable<Products>> GetAllAsync(int page = 1, int itemsPerPage = 10)
-        {
-            IQueryable<Products> query = _context.Products.AsQueryable();
-            return await query.Skip(itemsPerPage * (page - 1))
-                              .Take(itemsPerPage).ToListAsync();
-        }
 
-        public async Task<IEnumerable<Products>> GetAllAsync(int page = 1, int itemsPerPage = 10, string sortBy = "", bool directionAsc = true)
+        public async Task<IEnumerable<Products>> GetAllAsync(
+            int page = 1, 
+            int itemsPerPage = 10, 
+            string sortBy = "", 
+            bool directionAsc = true)
         {
             IQueryable<Products> query = _context.Products.AsQueryable();
-            var response = new List<Products>();
 
             query = query.Skip(itemsPerPage * (page - 1)).Take(itemsPerPage);
 
-            if (!string.IsNullOrEmpty(sortBy))
-            {
-                if (sortBy.ToLower().Equals("name"))
-                    query = directionAsc 
-                        ? query.OrderBy(elm => elm.Name)
-                        : query.OrderByDescending(elm => elm.Name);
-                else if (sortBy.ToLower().Equals("category"))
-                    query = directionAsc
-                        ? query.OrderBy(elm => elm.Category)
-                        : query.OrderByDescending(elm => elm.Category);
-            }
+            SetInqueryToOrderProducts(query, sortBy, directionAsc);
 
             return await query.ToListAsync();
         }
@@ -102,19 +90,24 @@ namespace ArandaTechnicalTest.Domain.Repositories
             return await _context.Products.CountAsync();
         }
 
-        public Task<IEnumerable<Products>> FilterAsync(int page, int itemsPerPage, string sortBy, bool directionAsc, string name)
+        public async Task<IEnumerable<Products>> FilterAsync(
+            int page = 1, 
+            int itemsPerPage = 10, 
+            string sortBy = "", 
+            bool directionAsc = true, 
+            string name = "", 
+            string description = "", 
+            string category = "")
         {
-            throw new NotImplementedException();
-        }
+            IQueryable<Products> query = _context.Products.AsQueryable();
 
-        public Task<IEnumerable<Products>> FilterAsync(int page, int itemsPerPage, string sortBy, bool directionAsc, string name, string description)
-        {
-            throw new NotImplementedException();
-        }
+            query = query.Skip(itemsPerPage * (page - 1)).Take(itemsPerPage);
 
-        public Task<IEnumerable<Products>> FilterAsync(int page, int itemsPerPage, string sortBy, bool directionAsc, string name, string description, string category)
-        {
-            throw new NotImplementedException();
+            SetInqueryToFilterProducts(query, name);
+
+            SetInqueryToOrderProducts(query, sortBy, directionAsc);
+
+            return await query.ToListAsync();
         }
 
         #endregion
@@ -123,6 +116,34 @@ namespace ArandaTechnicalTest.Domain.Repositories
 
         public async Task<bool> ExistsProduct(Guid id)
             => await _context.Products.AnyAsync(elm => elm.Id.Equals(id));
+
+        #endregion
+
+        #region OTHER METHODS
+
+        private static void SetInqueryToOrderProducts(IQueryable<Products> query, string sortBy, bool directionAsc)
+        {
+            if (!string.IsNullOrEmpty(sortBy))
+            {
+                if (sortBy.ToLower().Equals("name"))
+                    query = directionAsc
+                    ? query.OrderBy(elm => elm.Name)
+                        : query.OrderByDescending(elm => elm.Name);
+                else if (sortBy.ToLower().Equals("category"))
+                    query = directionAsc
+                    ? query.OrderBy(elm => elm.Category)
+                        : query.OrderByDescending(elm => elm.Category);
+            }
+        }
+
+        private static void SetInqueryToFilterProducts(IQueryable<Products> query, string name = "", string description = "", string category = "")
+        {
+            if (!string.IsNullOrEmpty(name))
+            {
+                name = name.ToLower();
+                query = query.Where(elm => elm.Name.ToLower().Contains(name));
+            }
+        }
 
         #endregion
 

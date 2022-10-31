@@ -93,15 +93,9 @@ namespace ArandaTechnicalTest.Presentation.Controllers
 
             // Agrego a la cabecera de la respuesta la cantidad total de registros que existen
             // en la tabla
-            Response.Headers["X-Total-Records"] = totalProducts.ToString();
+            Response.Headers.Add("X-Total-Records", totalProducts.ToString());
 
-            // Agrego a la cabecera de la respuesta la cantidad de páginas disponibles acorde a
-            // la cantidad de items por por página que desea obtener
-            Response.Headers["X-Total-Pages"] = (totalProducts / parameters.ItemsPerPage).ToString();
-
-            var products = string.IsNullOrWhiteSpace(parameters.SortBy)
-                ? await _repo.GetAllAsync(parameters.Page, parameters.ItemsPerPage)
-                : await _repo.GetAllAsync(parameters.Page, parameters.ItemsPerPage, parameters.SortBy, parameters.DirectionAsc);
+            var products = await _repo.GetAllAsync(parameters.Page, parameters.ItemsPerPage, parameters.SortBy, parameters.DirectionAsc);
             var productsDto = _mapper.Map<List<ProductDTO>>(products);
 
             return Ok(productsDto);
@@ -113,6 +107,31 @@ namespace ArandaTechnicalTest.Presentation.Controllers
         {
             int response = await _repo.GetTotalRecordsAsync();
             return Ok(response);
+        }
+
+        [HttpGet("filter")]
+        [ProducesResponseType(type: typeof(List<ProductDTO>), statusCode: StatusCodes.Status200OK)]
+        public async Task<ActionResult<List<ProductDTO>>> Filter([FromQuery] FilterParameters parameters)
+        {
+            parameters.Page = parameters.Page == 0 ? 1 : parameters.Page;
+            parameters.ItemsPerPage = parameters.ItemsPerPage == 0 ? 5 : parameters.ItemsPerPage;
+
+            IEnumerable<Products> products = 
+                await _repo.FilterAsync(
+                    parameters.Page, 
+                    parameters.ItemsPerPage, 
+                    parameters.SortBy, 
+                    parameters.DirectionAsc,
+                    parameters.Name,
+                    parameters.Description,
+                    parameters.Category);
+            var productsDto = _mapper.Map<List<ProductDTO>>(products);
+
+            // Agrego a la cabecera de la respuesta la cantidad total de registros que existen
+            // en la tabla
+            Response.Headers["X-Total-Records"] = productsDto.Count.ToString();
+
+            return Ok(productsDto);
         }
 
         #endregion
