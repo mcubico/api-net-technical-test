@@ -21,7 +21,10 @@ namespace ArandaTechnicalTest.Presentation.Controllers
 
         #region CONSTRUCTORS
 
-        public ProductsController(IProductRepository repo, IMapper mapper, IWebHostEnvironment environment)
+        public ProductsController(
+            IProductRepository repo, 
+            IMapper mapper, 
+            IWebHostEnvironment environment)
         {
             _repo = repo;
             _mapper = mapper;
