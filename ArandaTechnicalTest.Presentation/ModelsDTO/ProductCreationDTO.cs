@@ -1,4 +1,4 @@
-﻿using ArandaTechnicalTest.Presentation.Resources;
+﻿using ApiTechnicalTest.Presentation.Resources;
 using System.ComponentModel.DataAnnotations;
 
 namespace ArandaTechnicalTest.Presentation.ModelsDTO

@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ArandaTechnicalTest.Data\ArandaTechnicalTest.Data.csproj" />
+    <ProjectReference Include="..\ArandaTechnicalTest.Data\ApiTechnicalTest.Data.csproj" />
   </ItemGroup>
 
 </Project>

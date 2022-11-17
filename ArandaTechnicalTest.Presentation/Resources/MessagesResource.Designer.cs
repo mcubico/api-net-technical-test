@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ArandaTechnicalTest.Presentation.Resources {
+namespace ApiTechnicalTest.Presentation.Resources {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace ArandaTechnicalTest.Presentation.Resources {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ArandaTechnicalTest.Presentation.Resources.MessagesResource", typeof(MessagesResource).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ApiTechnicalTest.Presentation.Resources.MessagesResource", typeof(MessagesResource).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

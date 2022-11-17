@@ -19,8 +19,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ArandaTechnicalTest.Data\ArandaTechnicalTest.Data.csproj" />
-    <ProjectReference Include="..\ArandaTechnicalTest.Domain\ArandaTechnicalTest.Domain.csproj" />
+    <ProjectReference Include="..\ArandaTechnicalTest.Data\ApiTechnicalTest.Data.csproj" />
+    <ProjectReference Include="..\ArandaTechnicalTest.Domain\ApiTechnicalTest.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>
