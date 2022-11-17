@@ -4,6 +4,7 @@ using ApiTechnicalTest.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiTechnicalTest.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221117213137_Add_FK_Customer_In_Orders")]
+    partial class ConfigFKCustomerInOrders
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -45,9 +48,6 @@ namespace ApiTechnicalTest.Data.Migrations
                         .HasColumnType("nvarchar(250)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
 
                     b.ToTable("Categories");
                 });
@@ -113,14 +113,6 @@ namespace ApiTechnicalTest.Data.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("City");
-
-                    b.HasIndex("CompanyName");
-
-                    b.HasIndex("PostalCode");
-
-                    b.HasIndex("Region");
 
                     b.ToTable("Customers");
                 });
@@ -196,10 +188,6 @@ namespace ApiTechnicalTest.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PostalCode");
-
-                    b.HasIndex("FirstName", "LastName");
-
                     b.ToTable("Employees");
                 });
 
@@ -221,8 +209,6 @@ namespace ApiTechnicalTest.Data.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("ProductId", "OrderId");
-
-                    b.HasIndex("OrderId");
 
                     b.ToTable("OrderDetails");
                 });
@@ -261,19 +247,21 @@ namespace ApiTechnicalTest.Data.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
-                    b.Property<Guid?>("ShipVia")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("ShipVia")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<DateTime?>("ShippedDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("ShipperId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
 
                     b.HasIndex("EmployeeId");
-
-                    b.HasIndex("ShipVia");
 
                     b.ToTable("Orders");
                 });
@@ -319,8 +307,6 @@ namespace ApiTechnicalTest.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
-
-                    b.HasIndex("Name");
 
                     b.HasIndex("SupplierId");
 
@@ -422,55 +408,26 @@ namespace ApiTechnicalTest.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompanyName");
-
-                    b.HasIndex("PostalCode");
-
                     b.ToTable("Suppliers");
-                });
-
-            modelBuilder.Entity("ApiTechnicalTest.Data.Entities.OrderDetailEntity", b =>
-                {
-                    b.HasOne("ApiTechnicalTest.Data.Entities.OrderEntity", "Order")
-                        .WithMany("OrderDetails")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ApiTechnicalTest.Data.Entities.ProductEntity", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Order");
-
-                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("ApiTechnicalTest.Data.Entities.OrderEntity", b =>
                 {
                     b.HasOne("ApiTechnicalTest.Data.Entities.CustomerEntity", "Customer")
-                        .WithMany("Orders")
+                        .WithMany()
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ApiTechnicalTest.Data.Entities.EmployeeEntity", "Employee")
-                        .WithMany("Orders")
+                        .WithMany()
                         .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ApiTechnicalTest.Data.Entities.ShipperEntity", "Shipper")
-                        .WithMany("Orders")
-                        .HasForeignKey("ShipVia");
-
                     b.Navigation("Customer");
 
                     b.Navigation("Employee");
-
-                    b.Navigation("Shipper");
                 });
 
             modelBuilder.Entity("ApiTechnicalTest.Data.Entities.ProductEntity", b =>
@@ -495,26 +452,6 @@ namespace ApiTechnicalTest.Data.Migrations
             modelBuilder.Entity("ApiTechnicalTest.Data.Entities.CategoryEntity", b =>
                 {
                     b.Navigation("Products");
-                });
-
-            modelBuilder.Entity("ApiTechnicalTest.Data.Entities.CustomerEntity", b =>
-                {
-                    b.Navigation("Orders");
-                });
-
-            modelBuilder.Entity("ApiTechnicalTest.Data.Entities.EmployeeEntity", b =>
-                {
-                    b.Navigation("Orders");
-                });
-
-            modelBuilder.Entity("ApiTechnicalTest.Data.Entities.OrderEntity", b =>
-                {
-                    b.Navigation("OrderDetails");
-                });
-
-            modelBuilder.Entity("ApiTechnicalTest.Data.Entities.ShipperEntity", b =>
-                {
-                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("ApiTechnicalTest.Data.Entities.SupplierEntity", b =>

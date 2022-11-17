@@ -4,6 +4,7 @@ using ApiTechnicalTest.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiTechnicalTest.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221117215833_Config_Index_PostalCode_Customers")]
+    partial class ConfigIndexPostalCodeCustomers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -196,10 +199,6 @@ namespace ApiTechnicalTest.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PostalCode");
-
-                    b.HasIndex("FirstName", "LastName");
-
                     b.ToTable("Employees");
                 });
 
@@ -261,11 +260,15 @@ namespace ApiTechnicalTest.Data.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
-                    b.Property<Guid?>("ShipVia")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("ShipVia")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<DateTime?>("ShippedDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("ShipperId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -273,7 +276,7 @@ namespace ApiTechnicalTest.Data.Migrations
 
                     b.HasIndex("EmployeeId");
 
-                    b.HasIndex("ShipVia");
+                    b.HasIndex("ShipperId");
 
                     b.ToTable("Orders");
                 });
@@ -432,7 +435,7 @@ namespace ApiTechnicalTest.Data.Migrations
             modelBuilder.Entity("ApiTechnicalTest.Data.Entities.OrderDetailEntity", b =>
                 {
                     b.HasOne("ApiTechnicalTest.Data.Entities.OrderEntity", "Order")
-                        .WithMany("OrderDetails")
+                        .WithMany()
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -464,7 +467,7 @@ namespace ApiTechnicalTest.Data.Migrations
 
                     b.HasOne("ApiTechnicalTest.Data.Entities.ShipperEntity", "Shipper")
                         .WithMany("Orders")
-                        .HasForeignKey("ShipVia");
+                        .HasForeignKey("ShipperId");
 
                     b.Navigation("Customer");
 
@@ -505,11 +508,6 @@ namespace ApiTechnicalTest.Data.Migrations
             modelBuilder.Entity("ApiTechnicalTest.Data.Entities.EmployeeEntity", b =>
                 {
                     b.Navigation("Orders");
-                });
-
-            modelBuilder.Entity("ApiTechnicalTest.Data.Entities.OrderEntity", b =>
-                {
-                    b.Navigation("OrderDetails");
                 });
 
             modelBuilder.Entity("ApiTechnicalTest.Data.Entities.ShipperEntity", b =>
