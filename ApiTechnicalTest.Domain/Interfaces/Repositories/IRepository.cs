@@ -1,4 +1,4 @@
-﻿namespace ArandaTechnicalTest.Domain.Interfaces.Repositories
+﻿namespace ApiTechnicalTest.Domain.Interfaces.Repositories
 {
     public interface IRepository<T> : IDisposable where T : class
     {

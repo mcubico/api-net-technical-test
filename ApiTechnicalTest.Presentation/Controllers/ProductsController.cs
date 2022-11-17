@@ -1,5 +1,5 @@
-﻿using ArandaTechnicalTest.Data.Entities;
-using ArandaTechnicalTest.Domain.Interfaces.Repositories;
+﻿using ApiTechnicalTest.Data.Entities;
+using ApiTechnicalTest.Domain.Interfaces.Repositories;
 using ArandaTechnicalTest.Presentation.Models;
 using ArandaTechnicalTest.Presentation.ModelsDTO;
 using AutoMapper;
@@ -42,7 +42,7 @@ namespace ArandaTechnicalTest.Presentation.Controllers
         {
             data.Image = saveImage(data.File);
 
-            Products product = _mapper.Map<Products>(data);
+            ProductEntity product = _mapper.Map<ProductEntity>(data);
 
             product = await _repo.AddAsync(product);
 
@@ -62,7 +62,7 @@ namespace ArandaTechnicalTest.Presentation.Controllers
 
             data.Image = saveImage(data.File);
 
-            Products product = _mapper.Map<Products>(data);
+            ProductEntity product = _mapper.Map<ProductEntity>(data);
             _ = await _repo.UpdateAsync(product);
 
             return NoContent();
@@ -119,7 +119,7 @@ namespace ArandaTechnicalTest.Presentation.Controllers
             parameters.Page = parameters.Page == 0 ? 1 : parameters.Page;
             parameters.ItemsPerPage = parameters.ItemsPerPage == 0 ? 5 : parameters.ItemsPerPage;
 
-            IEnumerable<Products> products = 
+            IEnumerable<ProductEntity> products = 
                 await _repo.FilterAsync(
                     parameters.Page, 
                     parameters.ItemsPerPage, 

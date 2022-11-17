@@ -1,6 +1,6 @@
-using ArandaTechnicalTest.Data.Context;
-using ArandaTechnicalTest.Data.Entities;
-using ArandaTechnicalTest.Domain.Interfaces.Repositories;
+using ApiTechnicalTest.Data.Context;
+using ApiTechnicalTest.Data.Entities;
+using ApiTechnicalTest.Domain.Interfaces.Repositories;
 using ArandaTechnicalTest.Domain.Repositories;
 using ArandaTechnicalTest.Presentation.ModelsDTO;
 using Microsoft.EntityFrameworkCore;
@@ -24,7 +24,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddControllers();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(
-        builder.Configuration.GetConnectionString("sqlServerLocal")
+        builder.Configuration.GetConnectionString("localdb")
 ));
 
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
@@ -32,9 +32,9 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddAutoMapper(
     configAction =>
     {
-        configAction.CreateMap<Products, ProductDTO>();
-        configAction.CreateMap<ProductDTO, Products > ();
-        configAction.CreateMap<ProductCreationDTO, Products > ();
+        configAction.CreateMap<ProductEntity, ProductDTO>();
+        configAction.CreateMap<ProductDTO, ProductEntity > ();
+        configAction.CreateMap<ProductCreationDTO, ProductEntity > ();
     },
     typeof(Program).Assembly
 );

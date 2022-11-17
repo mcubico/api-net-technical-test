@@ -1,12 +1,12 @@
 ﻿using ApiTechnicalTest.Data.Context;
 using ApiTechnicalTest.Data.Entities;
 using ApiTechnicalTest.Domain.Interfaces.Repositories;
-using Microsoft.EntityFrameworkCore;
+using ArandaTechnicalTest.Domain.Repositories;
 using Microsoft.Extensions.Logging;
 
-namespace ArandaTechnicalTest.Domain.Repositories
+namespace ApiTechnicalTest.Domain.Repositories
 {
-    public class ProductRepository : IProductRepository
+    public class CategoryRepository : ICategoryRepository
     {
         #region ATTRIBUTES
 
@@ -23,7 +23,7 @@ namespace ArandaTechnicalTest.Domain.Repositories
 
         #region CONSTRUCTORS
 
-        public ProductRepository(ApplicationDbContext context, ILogger<ProductRepository> logger)
+        public CategoryRepository(ApplicationDbContext context, ILogger<ProductRepository> logger)
         {
             _context = context;
             _logger = logger;
@@ -33,7 +33,7 @@ namespace ArandaTechnicalTest.Domain.Repositories
 
         #region CRUD
 
-        public async Task<ProductEntity> AddAsync(ProductEntity entity)
+        public async Task<CategoryEntity> AddAsync(CategoryEntity entity)
         {
             _logger.LogInformation("Registrando un nuevo producto");
 
@@ -43,12 +43,12 @@ namespace ArandaTechnicalTest.Domain.Repositories
             return entity;
         }
 
-        public Task<ProductEntity> UpdateAsync(ProductEntity entity)
+        public Task<CategoryEntity> DeleteAsync(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ProductEntity> DeleteAsync(Guid id)
+        public Task<CategoryEntity> UpdateAsync(CategoryEntity entity)
         {
             throw new NotImplementedException();
         }
@@ -56,44 +56,16 @@ namespace ArandaTechnicalTest.Domain.Repositories
         #endregion
 
         #region SEARCHES
-
-        public async Task<IEnumerable<ProductEntity>> GetAllAsync(
-            int page = 1, 
-            int itemsPerPage = 10, 
-            string sortBy = "", 
-            bool directionAsc = true)
-        {
-            IQueryable<ProductEntity> query = _context.Products.AsQueryable();
-            query = query.Skip(itemsPerPage * (page - 1)).Take(itemsPerPage);
-
-            return await query.ToListAsync();
-        }
-
-        public async Task<ProductEntity> GetByIdAsync(Guid id)
-        {
-            var response = await _context.Products
-                .Include(product => product.Category)
-                .FirstOrDefaultAsync(elm => elm.Id.Equals(id));
-
-            return response;
-        }
-
-        public async Task<int> GetTotalRecordsAsync()
-        {
-            return await _context.Products.CountAsync();
-        }
-
-        public Task<IEnumerable<ProductEntity>> FilterAsync(int page, int itemsPerPage, string sortBy, bool directionAsc, string name, string description, string category)
+        
+        public Task<IEnumerable<CategoryEntity>> GetAllAsync(int page, int itemsPerPage, string sortBy, bool directionAsc)
         {
             throw new NotImplementedException();
         }
 
-        #endregion
-
-        #region VALIDATIONS
-
-        public async Task<bool> ExistsProduct(Guid id)
-            => await _context.Products.AnyAsync(elm => elm.Id.Equals(id));
+        public Task<CategoryEntity> GetByIdAsync(Guid id)
+        {
+            throw new NotImplementedException();
+        } 
 
         #endregion
 
