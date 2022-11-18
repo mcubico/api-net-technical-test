@@ -1,6 +1,8 @@
 using ApiTechnicalTest.Data.Context;
 using ApiTechnicalTest.Data.Entities;
 using ApiTechnicalTest.Domain.Interfaces.Repositories;
+using ApiTechnicalTest.Domain.Repositories;
+using ApiTechnicalTest.Presentation.ModelsDTO;
 using ArandaTechnicalTest.Domain.Repositories;
 using ArandaTechnicalTest.Presentation.ModelsDTO;
 using Microsoft.EntityFrameworkCore;
@@ -28,13 +30,20 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlSer
 ));
 
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
 builder.Services.AddAutoMapper(
     configAction =>
     {
+        // Product AutoMapper
         configAction.CreateMap<ProductEntity, ProductDTO>();
         configAction.CreateMap<ProductDTO, ProductEntity > ();
         configAction.CreateMap<ProductCreationDTO, ProductEntity > ();
+
+        // Category AutoMapper
+        configAction.CreateMap<CategoryEntity, CategoryDTO>();
+        configAction.CreateMap<CategoryDTO, CategoryEntity>();
+        configAction.CreateMap<CategoryCreationDTO, CategoryEntity>();
     },
     typeof(Program).Assembly
 );

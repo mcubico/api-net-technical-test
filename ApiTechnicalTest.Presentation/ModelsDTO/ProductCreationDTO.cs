@@ -14,25 +14,30 @@ namespace ArandaTechnicalTest.Presentation.ModelsDTO
         [DisplayFormat(ConvertEmptyStringToNull = true)]
         public string Name { get; set; }
 
-        [StringLength(250,
-            ErrorMessageResourceType = typeof(MessagesResource),
-            ErrorMessageResourceName = "StringLengthMax")]
-        public string? Description { get; set; }
+        [Required(
+           ErrorMessageResourceType = typeof(MessagesResource),
+           ErrorMessageResourceName = "Required")]
+        public Guid CategoryId { get; set; }
 
-        [Required(AllowEmptyStrings = false,
+        [Required(
             ErrorMessageResourceType = typeof(MessagesResource),
             ErrorMessageResourceName = "Required")]
-        [StringLength(50,
-            ErrorMessageResourceType = typeof(MessagesResource),
-            ErrorMessageResourceName = "StringLengthMax")]
-        [DisplayFormat(ConvertEmptyStringToNull = true)]
-        public string Category { get; set; }
+        public int QuantityPerUnit { get; set; } = 0;
 
-        [StringLength(250,
+        [Required(
             ErrorMessageResourceType = typeof(MessagesResource),
-            ErrorMessageResourceName = "StringLengthMax")]
-        public string? Image { get; set; }
+            ErrorMessageResourceName = "Required")]
+        public decimal UnitPrice { get; set; } = 0;
 
-        public IFormFile? File { get; set; }
+        public int? UnitsOnOrder { get; set; } = 0;
+
+        public int? RecorderLevel { get; set; } = 0;
+
+        public bool? Discontinuated { get; set; } = false;
+
+        [Required(
+           ErrorMessageResourceType = typeof(MessagesResource),
+           ErrorMessageResourceName = "Required")]
+        public Guid SupplierId { get; set; }
     }
 }
