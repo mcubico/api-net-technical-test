@@ -59,9 +59,7 @@ namespace ArandaTechnicalTest.Domain.Repositories
 
         public async Task<IEnumerable<ProductEntity>> GetAllAsync(
             int page = 1, 
-            int itemsPerPage = 10, 
-            string sortBy = "", 
-            bool directionAsc = true)
+            int itemsPerPage = 10)
         {
             IQueryable<ProductEntity> query = _context.Products.AsQueryable();
             query = query.Skip(itemsPerPage * (page - 1)).Take(itemsPerPage);

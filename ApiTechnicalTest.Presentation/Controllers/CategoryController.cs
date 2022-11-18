@@ -1,13 +1,13 @@
 ﻿using ApiTechnicalTest.Data.Entities;
 using ApiTechnicalTest.Domain.Interfaces.Repositories;
 using ApiTechnicalTest.Presentation.ModelsDTO;
-using ArandaTechnicalTest.Presentation.ModelsDTO;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiTechnicalTest.Presentation.Controllers
 {
     [Route("api/[controller]")]
+    [RequireHttps]
     [ApiController]
     public class CategoryController : ControllerBase
     {
@@ -36,7 +36,7 @@ namespace ApiTechnicalTest.Presentation.Controllers
         #region CRUD ACTIONS
 
         [HttpPost]
-        [ProducesResponseType(type: typeof(CategoryDTO), statusCode: StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(statusCode: StatusCodes.Status400BadRequest)]
         [ProducesResponseType(type: typeof(CategoryDTO), statusCode: StatusCodes.Status201Created)]
         public async Task<IActionResult> Post([FromForm] CategoryCreationDTO data)
         {

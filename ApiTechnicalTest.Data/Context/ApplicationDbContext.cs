@@ -14,6 +14,18 @@ namespace ApiTechnicalTest.Data.Context
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<OrderDetailEntity>().HasKey(elm => new { elm.ProductId, elm.OrderId });
+            builder.Entity<SupplierEntity>().HasData(new SupplierEntity
+            {
+                Id = Guid.NewGuid(),
+                SupplierId = "AB-12345",
+                CompanyName = "Supplier name",
+                ContactName = "Contact name",
+                Address = "Address",
+                City = "Cyty",
+                Country = "Country",
+                Phone = "3112222222",
+                HomePage = "https://www.supplier.com",
+            });
 
             base.OnModelCreating(builder);
         }

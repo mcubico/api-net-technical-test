@@ -1,13 +1,11 @@
 ﻿using ApiTechnicalTest.Data.Context;
 using ApiTechnicalTest.Data.Entities;
 using ApiTechnicalTest.Domain.Interfaces.Repositories;
-using ArandaTechnicalTest.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 namespace ApiTechnicalTest.Domain.Repositories
 {
-    public class CategoryRepository : ICategoryRepository
+    public class SupplierRepository : ISupplierRepository
     {
         #region ATTRIBUTES
 
@@ -18,38 +16,31 @@ namespace ApiTechnicalTest.Domain.Repositories
         protected bool disposed;
 
         private readonly ApplicationDbContext _context;
-        private readonly ILogger<ProductRepository> _logger;
 
         #endregion
 
         #region CONSTRUCTORS
 
-        public CategoryRepository(ApplicationDbContext context, ILogger<ProductRepository> logger)
+        public SupplierRepository(ApplicationDbContext context)
         {
             _context = context;
-            _logger = logger;
         }
 
         #endregion
 
         #region CRUD
 
-        public async Task<CategoryEntity> AddAsync(CategoryEntity entity)
-        {
-            _logger.LogInformation("Registrando un nuevo producto");
-
-            _context.Add(entity);
-            _ = await _context.SaveChangesAsync();
-
-            return entity;
-        }
-
-        public Task<CategoryEntity> DeleteAsync(Guid id)
+        public Task<SupplierEntity> AddAsync(SupplierEntity entity)
         {
             throw new NotImplementedException();
         }
 
-        public Task<CategoryEntity> UpdateAsync(CategoryEntity entity)
+        public Task<SupplierEntity> UpdateAsync(SupplierEntity entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<SupplierEntity> IRepository<SupplierEntity>.DeleteAsync(Guid id)
         {
             throw new NotImplementedException();
         }
@@ -57,13 +48,13 @@ namespace ApiTechnicalTest.Domain.Repositories
         #endregion
 
         #region SEARCHES
-        
-        public Task<IEnumerable<CategoryEntity>> GetAllAsync(int page, int itemsPerPage)
+
+        public Task<SupplierEntity> GetByIdAsync(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<CategoryEntity> GetByIdAsync(Guid id)
+        public Task<IEnumerable<SupplierEntity>> GetAllAsync(int page, int itemsPerPage)
         {
             throw new NotImplementedException();
         }
@@ -72,8 +63,8 @@ namespace ApiTechnicalTest.Domain.Repositories
 
         #region VALIDATIONS
 
-        public async Task<bool> CategoryExistAsync(Guid id)
-            => await _context.Categories.CountAsync(elm => elm.Id.Equals(id)) > 0;
+        public async Task<bool> SupplierExistAsync(Guid id)
+            => await _context.Suppliers.CountAsync(elm => elm.Id.Equals(id)) > 0;
 
         #endregion
 
