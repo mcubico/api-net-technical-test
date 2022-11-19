@@ -3,6 +3,8 @@ using ApiTechnicalTest.Domain.Interfaces.Repositories;
 using ArandaTechnicalTest.Presentation.Models;
 using ArandaTechnicalTest.Presentation.ModelsDTO;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ArandaTechnicalTest.Presentation.Controllers
@@ -42,8 +44,10 @@ namespace ArandaTechnicalTest.Presentation.Controllers
 
         #region CRUD ACTIONS
 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost]
         [ProducesResponseType(statusCode: StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(statusCode: StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(type: typeof(ProductDTO), statusCode: StatusCodes.Status201Created)]
         public async Task<IActionResult> Post([FromForm] ProductCreationDTO data)
         {

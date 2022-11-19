@@ -4,6 +4,7 @@ using ApiTechnicalTest.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiTechnicalTest.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221118235002_Create_Users_System_Tables")]
+    partial class CreateUsersSystemTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,16 +53,6 @@ namespace ApiTechnicalTest.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("Categories");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("451747c3-e532-4a7c-a7d8-088bb156eb58"),
-                            Active = true,
-                            Description = "Pants for women and men",
-                            Name = "Pants",
-                            Picture = "pants.jpg"
-                        });
                 });
 
             modelBuilder.Entity("ApiTechnicalTest.Data.Entities.CustomerEntity", b =>
@@ -335,21 +328,6 @@ namespace ApiTechnicalTest.Data.Migrations
                     b.HasIndex("SupplierId");
 
                     b.ToTable("Products");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("0889e287-d770-42dd-9d74-64ad2d43cf9e"),
-                            Active = true,
-                            CategoryId = new Guid("451747c3-e532-4a7c-a7d8-088bb156eb58"),
-                            Discontinuated = false,
-                            Name = "Jean",
-                            QuantityPerUnit = 10,
-                            SupplierId = new Guid("91a1947f-775a-46b0-80f5-e0ec596f9662"),
-                            UnitPrice = 49900m,
-                            UnitsInStock = 50,
-                            UnitsOnOrder = 0
-                        });
                 });
 
             modelBuilder.Entity("ApiTechnicalTest.Data.Entities.ShipperEntity", b =>
@@ -456,7 +434,7 @@ namespace ApiTechnicalTest.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("91a1947f-775a-46b0-80f5-e0ec596f9662"),
+                            Id = new Guid("83b9c01a-b498-44a5-8e02-4e93d38da0f9"),
                             Active = true,
                             Address = "Address",
                             City = "Cyty",
@@ -494,15 +472,6 @@ namespace ApiTechnicalTest.Data.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "a9c5f5f8-213f-423c-b531-8c0dfe23f580",
-                            ConcurrencyStamp = "a9c5f5f8-213f-423c-b531-8c0dfe23f580",
-                            Name = "Super Administrator",
-                            NormalizedName = "SUPER_ADMIN"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -593,23 +562,6 @@ namespace ApiTechnicalTest.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "4e9d145b-ee4d-4a53-a97c-460559f38b90",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "d52c6b51-ec55-497e-8ee8-25e9dc3902ca",
-                            Email = "mcubico33@gmail.com",
-                            EmailConfirmed = true,
-                            LockoutEnabled = false,
-                            NormalizedUserName = "mcubico33@gmail.com",
-                            PasswordHash = "AQAAAAIAAYagAAAAEC0qD6oGDQEOJ0U81rsWUt90IOa1pvWNn07M7J4bwZvHdHo6Rt8iRMkajEwYMhQskQ==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "fee718a8-a9f6-4a0b-ad42-3f8cd42ec0c5",
-                            TwoFactorEnabled = false,
-                            UserName = "mcubico"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -672,13 +624,6 @@ namespace ApiTechnicalTest.Data.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = "4e9d145b-ee4d-4a53-a97c-460559f38b90",
-                            RoleId = "a9c5f5f8-213f-423c-b531-8c0dfe23f580"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>

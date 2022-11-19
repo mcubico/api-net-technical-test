@@ -2,12 +2,18 @@
 using ApiTechnicalTest.Domain.Interfaces.Repositories;
 using ApiTechnicalTest.Presentation.ModelsDTO;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiTechnicalTest.Presentation.Controllers
 {
+    /// <summary>
+    /// Gestiona las acciones permitidas sobre la entidad categorías
+    /// </summary>
     [Route("api/[controller]")]
     [RequireHttps]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [ApiController]
     public class CategoryController : ControllerBase
     {
@@ -37,6 +43,7 @@ namespace ApiTechnicalTest.Presentation.Controllers
 
         [HttpPost]
         [ProducesResponseType(statusCode: StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(statusCode: StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(type: typeof(CategoryDTO), statusCode: StatusCodes.Status201Created)]
         public async Task<IActionResult> Post([FromForm] CategoryCreationDTO data)
         {

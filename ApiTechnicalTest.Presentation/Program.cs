@@ -5,7 +5,13 @@ using ApiTechnicalTest.Domain.Repositories;
 using ApiTechnicalTest.Presentation.ModelsDTO;
 using ArandaTechnicalTest.Domain.Repositories;
 using ArandaTechnicalTest.Presentation.ModelsDTO;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using System.Reflection;
+using System.Text;
 
 const string ALLOWED_ORIGINS = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
@@ -49,9 +55,73 @@ builder.Services.AddAutoMapper(
     typeof(Program).Assembly
 );
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer( options =>
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"])),
+            ClockSkew = TimeSpan.Zero
+        }
+    );
+
+builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
+
+builder.Services.AddSwaggerGen(config =>
+    {
+        // Configuro la documentacón de swagger
+        config.SwaggerDoc("v1", info: new OpenApiInfo
+        {
+            Version = "v1.0.0",
+            Title = "Intcomex - ApiTechnicalTest",
+            Description = "Prueba técnica de la empresa Intcomex para los desarrolladores de software",
+            License = new OpenApiLicense { Name = "MIT" },
+            Contact = new OpenApiContact { Name = "Mauricio Montoya Medrano", Email = "mcubico33@gmail.com" }
+        });
+
+        // Configuro la autenticación que debe usar swagger cuando sea requerida
+        config.AddSecurityDefinition(
+            name: "Bearer",
+            new OpenApiSecurityScheme
+            {
+                Name = "Authorization",
+                Type = SecuritySchemeType.ApiKey,
+                Scheme = "Bearer",
+                BearerFormat = "JWT",
+                In = ParameterLocation.Header
+            }
+        );
+
+        config.AddSecurityRequirement(
+            new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                    },
+                    new string[]{ }
+                }
+            }    
+        );
+
+        // Configuro swagger para que exponga la documentación de los endpoints tomandola de los mismos métodos
+        var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+        var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+        config.IncludeXmlComments(xmlPath);
+    }
+);
 
 var app = builder.Build();
 
