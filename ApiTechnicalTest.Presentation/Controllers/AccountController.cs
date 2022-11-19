@@ -8,6 +8,9 @@ using System.Text;
 
 namespace ApiTechnicalTest.Presentation.Controllers
 {
+    /// <summary>
+    /// Gestiona las acciones de los usuarios
+    /// </summary>
     [Route("api/[controller]")]
     [RequireHttps]
     [ApiController]
