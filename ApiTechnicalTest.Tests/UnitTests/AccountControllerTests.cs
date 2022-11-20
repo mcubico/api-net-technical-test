@@ -9,26 +9,34 @@ namespace ApiTechnicalTest.Tests.UnitTests
     [TestClass]
     public class AccountControllerTests
     {
+        private readonly SignInManagerMock _signInManagerMock;
+        private readonly ConfigurationGetJwtKeyMock _configurationGetJwtKeyMock;
+        private readonly AccountController _controller;
+
+        public AccountControllerTests()
+        {
+            _signInManagerMock = new SignInManagerMock();
+            _configurationGetJwtKeyMock = new ConfigurationGetJwtKeyMock();
+            _controller = new AccountController(_signInManagerMock, _configurationGetJwtKeyMock);
+        }
+
         [TestMethod]
         public async Task UsernameToSignInIsRequired()
         {
             try
             {
-                // Preparación
-                var signInManagerMock = new SignInManagerMock();
-                var configurationGetJwtKeyMock = new ConfigurationGetJwtKeyMock();
-                var controller = new AccountController(signInManagerMock, configurationGetJwtKeyMock);
+                // Preparatión
                 var userData = new SingInModel
                 {
                     Password = "password",
                 };
 
-                // Ejecución
-                var response = await controller.Post(userData) as BadRequestObjectResult;
+                // Execution
+                var response = await _controller.Post(userData);
             }
             catch (Exception ex)
             {
-
+                // Verification
                 Assert.AreEqual("Value cannot be null. (Parameter 'userName')", ex.Message);
             }
         }
@@ -38,21 +46,18 @@ namespace ApiTechnicalTest.Tests.UnitTests
         {
             try
             {
-                // Preparación
-                var signInManagerMock = new SignInManagerMock();
-                var configurationGetJwtKeyMock = new ConfigurationGetJwtKeyMock();
-                var controller = new AccountController(signInManagerMock, configurationGetJwtKeyMock);
+                // Preparatión
                 var userData = new SingInModel
                 {
                     Username = "password",
                 };
 
-                // Ejecución
-                var response = await controller.Post(userData) as BadRequestObjectResult;
+                // Execution
+                var response = await _controller.Post(userData);
             }
             catch (Exception ex)
             {
-
+                // Verification
                 Assert.AreEqual("Value cannot be null. (Parameter 'password')", ex.Message);
             }
         }
@@ -60,42 +65,40 @@ namespace ApiTechnicalTest.Tests.UnitTests
         [TestMethod]
         public async Task UsernameMostBeAnEmail()
         {
-            // Preparación
-            var signInManagerMock = new SignInManagerMock();
-            var configurationGetJwtKeyMock = new ConfigurationGetJwtKeyMock();
-            var controller = new AccountController(signInManagerMock, configurationGetJwtKeyMock);
+            // Preparatión
             var userData = new SingInModel
             {
                 Username = "username",
                 Password = "password",
             };
 
-            // Ejecución
-            var response = await controller.Post(userData) as BadRequestObjectResult;
+            // Execution
+            var response = await _controller.Post(userData);
 
-            // Verificación
-            Assert.AreEqual(StatusCodes.Status400BadRequest, response?.StatusCode);
-            Assert.AreEqual("Username or password incorrect", response?.Value);
+            // Verification
+            Assert.IsInstanceOfType(response, typeof(BadRequestObjectResult));
+            var badRequestResponse = (BadRequestObjectResult)response;
+            Assert.AreEqual(StatusCodes.Status400BadRequest, badRequestResponse?.StatusCode);
+            Assert.AreEqual("Username or password incorrect", badRequestResponse?.Value);
         }
 
         [TestMethod]
         public async Task CanBeAuthenticatedWithTheCorrectCredentials()
         {
-            // Preparación
-            var signInManagerMock = new SignInManagerMock();
-            var configurationGetJwtKeyMock = new ConfigurationGetJwtKeyMock();
-            var controller = new AccountController(signInManagerMock, configurationGetJwtKeyMock);
+            // Preparatión
             var userData = new SingInModel
             {
                 Username = "mcubico33@gmail.com",
                 Password = "4dm1n***",
             };
 
-            // Ejecución
-            var response = await controller.Post(userData);
+            // Execution
+            var response = await _controller.Post(userData);
 
-            // Verificación
-            Assert.AreEqual(StatusCodes.Status200OK, response);
+            // Verification
+            Assert.IsInstanceOfType(response, typeof(OkObjectResult));
+            var okResponse = (OkObjectResult)response;
+            Assert.AreEqual(StatusCodes.Status200OK, okResponse?.StatusCode);
         }
     }
 }
