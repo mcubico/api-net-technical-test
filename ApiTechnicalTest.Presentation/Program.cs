@@ -32,7 +32,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddControllers();
 
 builder.Services.AddDbContext<ApplicationDbContext>(
-    options => options.UseSqlServer(builder.Configuration.GetConnectionString("localdb"))
+    options => options.UseSqlServer(builder.Configuration.GetConnectionString("sqlServerAzure"))
 );
 
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
@@ -128,9 +128,12 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    app.UseDeveloperExceptionPage();
     app.UseSwagger();
-    app.UseSwaggerUI();
 }
+
+app.UseSwaggerUI();
+
 
 //migrate any database changes on startup (includes initial db creation)
 using (var scope = app.Services.CreateScope())
