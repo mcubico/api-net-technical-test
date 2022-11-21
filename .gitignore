@@ -396,3 +396,6 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# Net core
+/ApiTechnicalTest.Presentation/appsettings.Development.json

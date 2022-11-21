@@ -28,7 +28,7 @@ builder.Services.AddCors(options =>
         });
 });
 
-// Add services to the container.
+builder.Services.AddApplicationInsightsTelemetry(builder.Configuration["ApplicationInsghts:ConnectionString"]);
 
 builder.Services.AddControllers(config =>
 {
@@ -36,7 +36,7 @@ builder.Services.AddControllers(config =>
 });
 
 builder.Services.AddDbContext<ApplicationDbContext>(
-    options => options.UseSqlServer(builder.Configuration.GetConnectionString("sqlServerAzure"))
+    options => options.UseSqlServer(builder.Configuration.GetConnectionString("defaultConnection"))
 );
 
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
@@ -69,7 +69,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = false,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"])),
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["jwtKey"])),
             ClockSkew = TimeSpan.Zero
         }
     );

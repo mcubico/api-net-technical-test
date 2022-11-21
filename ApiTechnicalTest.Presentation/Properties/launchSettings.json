@@ -9,7 +9,7 @@
     }
   },
   "profiles": {
-    "ArandaTechnicalTest.Presentation": {
+    "ApiTechnicalTest.Presentation": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
