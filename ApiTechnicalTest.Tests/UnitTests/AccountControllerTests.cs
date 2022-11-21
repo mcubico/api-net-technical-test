@@ -9,15 +9,15 @@ namespace ApiTechnicalTest.Tests.UnitTests
     [TestClass]
     public class AccountControllerTests
     {
-        private readonly SignInManagerMock _signInManagerMock;
+        private readonly SignInManagerValidateRequirementDataMock _signInManagerValidateRequirementDataMock;
         private readonly ConfigurationGetJwtKeyMock _configurationGetJwtKeyMock;
-        private readonly AccountController _controller;
+        private AccountController _controller;
 
         public AccountControllerTests()
         {
-            _signInManagerMock = new SignInManagerMock();
+            _signInManagerValidateRequirementDataMock = new SignInManagerValidateRequirementDataMock();
             _configurationGetJwtKeyMock = new ConfigurationGetJwtKeyMock();
-            _controller = new AccountController(_signInManagerMock, _configurationGetJwtKeyMock);
+            _controller = new AccountController(_signInManagerValidateRequirementDataMock, _configurationGetJwtKeyMock);
         }
 
         [TestMethod]
@@ -93,6 +93,7 @@ namespace ApiTechnicalTest.Tests.UnitTests
             };
 
             // Execution
+            _controller = new AccountController(new SignInManagerMock(), _configurationGetJwtKeyMock);
             var response = await _controller.Post(userData);
 
             // Verification

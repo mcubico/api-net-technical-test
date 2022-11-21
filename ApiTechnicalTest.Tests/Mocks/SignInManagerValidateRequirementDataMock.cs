@@ -4,13 +4,12 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
-using System.Security.Claims;
 
 namespace ApiTechnicalTest.Tests.Mocks
 {
-    public class SignInManagerMock : SignInManager<IdentityUser>
+    public class SignInManagerValidateRequirementDataMock : SignInManager<IdentityUser>
     {
-        public SignInManagerMock()
+        public SignInManagerValidateRequirementDataMock()
             : base(
                 new UserManagerMock(),
                 new Mock<IHttpContextAccessor>().Object,
@@ -21,11 +20,5 @@ namespace ApiTechnicalTest.Tests.Mocks
                 new Mock<IUserConfirmation<IdentityUser>>().Object
             )
         { }
-
-        public override async Task<SignInResult> PasswordSignInAsync(string userName, string password,
-        bool isPersistent, bool lockoutOnFailure)
-        {
-            return SignInResult.Success;
-        }
     }
 }
