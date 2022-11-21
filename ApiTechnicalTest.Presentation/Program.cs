@@ -2,6 +2,7 @@ using ApiTechnicalTest.Data.Context;
 using ApiTechnicalTest.Data.Entities;
 using ApiTechnicalTest.Domain.Interfaces.Repositories;
 using ApiTechnicalTest.Domain.Repositories;
+using ApiTechnicalTest.Presentation.Helpers.Filters;
 using ApiTechnicalTest.Presentation.ModelsDTO;
 using ArandaTechnicalTest.Domain.Repositories;
 using ArandaTechnicalTest.Presentation.ModelsDTO;
@@ -29,7 +30,10 @@ builder.Services.AddCors(options =>
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(config =>
+{
+    config.Filters.Add(typeof(ExceptionFilterHelper));
+});
 
 builder.Services.AddDbContext<ApplicationDbContext>(
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("sqlServerAzure"))
@@ -126,13 +130,20 @@ builder.Services.AddSwaggerGen(config =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+app.UseSwagger();   
 if (app.Environment.IsDevelopment())
 {
+    app.UseSwaggerUI();
     app.UseDeveloperExceptionPage();
-    app.UseSwagger();
+}
+else
+{
+    app.UseSwaggerUI(config =>
+    {
+        config.SwaggerEndpoint("v1/swagger.json", "Intcomex Technical Test v1");
+    });
 }
 
-app.UseSwaggerUI();
 
 
 //migrate any database changes on startup (includes initial db creation)
