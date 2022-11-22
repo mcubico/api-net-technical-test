@@ -2,6 +2,7 @@ using ApiTechnicalTest.Data.Context;
 using ApiTechnicalTest.Data.Entities;
 using ApiTechnicalTest.Domain.Interfaces.Repositories;
 using ApiTechnicalTest.Domain.Repositories;
+using ApiTechnicalTest.Presentation.Helpers.Constants;
 using ApiTechnicalTest.Presentation.Helpers.Filters;
 using ApiTechnicalTest.Presentation.ModelsDTO;
 using ArandaTechnicalTest.Domain.Repositories;
@@ -14,12 +15,11 @@ using Microsoft.OpenApi.Models;
 using System.Reflection;
 using System.Text;
 
-const string ALLOWED_ORIGINS = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: ALLOWED_ORIGINS, 
+    options.AddPolicy(name: AppSettingsConstantsHelper.ALLOWED_ORIGINS, 
         policy => 
         { 
             policy.WithOrigins("*")
@@ -28,7 +28,9 @@ builder.Services.AddCors(options =>
         });
 });
 
-builder.Services.AddApplicationInsightsTelemetry(builder.Configuration["ApplicationInsghts:ConnectionString"]);
+builder.Services.AddApplicationInsightsTelemetry(
+    builder.Configuration[AppSettingsConstantsHelper.CONNECTION_STRING_APPLICATION_INSIGHTS]
+);
 
 builder.Services.AddControllers(config =>
 {
@@ -36,7 +38,7 @@ builder.Services.AddControllers(config =>
 });
 
 builder.Services.AddDbContext<ApplicationDbContext>(
-    options => options.UseSqlServer(builder.Configuration.GetConnectionString("defaultConnection"))
+    options => options.UseSqlServer(builder.Configuration.GetConnectionString(AppSettingsConstantsHelper.CONNECTION_STRING_SQL_SERVER_AZURE))
 );
 
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
@@ -69,7 +71,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = false,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["jwtKey"])),
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration[AppSettingsConstantsHelper.JWT_KEY])),
             ClockSkew = TimeSpan.Zero
         }
     );
@@ -144,8 +146,6 @@ else
     });
 }
 
-
-
 //migrate any database changes on startup (includes initial db creation)
 using (var scope = app.Services.CreateScope())
 {
@@ -155,7 +155,7 @@ using (var scope = app.Services.CreateScope())
 
 app.UseHttpsRedirection();
 
-app.UseCors(ALLOWED_ORIGINS);
+app.UseCors(AppSettingsConstantsHelper.ALLOWED_ORIGINS);
 
 app.UseStaticFiles();
 

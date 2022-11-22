@@ -1,4 +1,5 @@
-﻿using ApiTechnicalTest.Presentation.Models;
+﻿using ApiTechnicalTest.Presentation.Helpers.Constants;
+using ApiTechnicalTest.Presentation.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -61,7 +62,7 @@ namespace ApiTechnicalTest.Presentation.Controllers
                   new Claim(type: "username", value: data.Username)
             };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(s: _environment["JWT:key"]));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(s: _environment[AppSettingsConstantsHelper.JWT_KEY]));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             var expiration = DateTime.UtcNow.AddHours(1);
             var securityToken = new JwtSecurityToken(
